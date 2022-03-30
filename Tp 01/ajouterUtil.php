@@ -10,7 +10,7 @@
 
 
 <div class="container">
-    <form method="post" action="">
+    <form method="post" action="" enctype="multipart/form-data">
         <label class="form-label" for="nom">Votre nom :</label> 
         <input class="form-control" type="text" name="nom">
 
@@ -24,19 +24,32 @@
         <input class="form-control" type="password" name="password">
 
         <label class="form-label" for="img">Choissiez une PP:</label>
-        <input class="form-control" type="text" name="img">
+        <input class="form-control" type="file" name="img">
 
         <input class="btn btn-primary m-3" type="submit" name="valider" value="Valider">
     </form>
 </div>
 
 <?php
+
     if(isset($_POST["valider"])){
-        if(!empty($_POST["nom"]) AND !empty($_POST['prenom']) AND !empty($_POST["mail"]) AND !empty($_POST['password']) AND !empty($_POST['img'])){
-            ajouterUtil($bdd, $_POST['nom'], $_POST['prenom'], $_POST['mail'], $_POST['password'], $_POST['img']);
+
+        if(!empty($_FILES['img']['name'])){
+            $tmpName = $_FILES['img']['tmp_name'];
+            $name = $_FILES['img']['name'];
+            $size = $_FILES['img']['size'];
+            $error = $_FILES['img']['error'];
+            $url ="./img/$name";
+            $move = move_uploaded_file($tmpName, $url);
+        }else{
+            $url= "./img/default.jpg";
+        }
+
+        if(!empty($_POST["nom"]) AND !empty($_POST['prenom']) AND !empty($_POST["mail"]) AND !empty($_POST['password'])){
+            ajouterUtil($bdd, $_POST['nom'], $_POST['prenom'], $_POST['mail'], $_POST['password'], $url);
         }else{
             echo 
-                '<div class="alert alert-warning container"> Tout les champs doivent être remplis </div>';
+                '<div class="alert alert-warning container"> Tous les champs doivent être remplis </div>';
         }
     }
 ?>
