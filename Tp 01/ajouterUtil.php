@@ -32,6 +32,8 @@
 
 <?php
 
+
+
     if(isset($_POST["valider"])){
 
         if(!empty($_FILES['img']['name'])){
